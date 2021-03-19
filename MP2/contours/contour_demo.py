@@ -55,7 +55,7 @@ def save_results(out_file_name, threshold_results, overall_result, runtime):
   f1 = overall_result.f1
   best_f1 = overall_result.best_f1
   area_pr = overall_result.area_pr
-  np.savez(out_file_name, precision=precision, recall=recall, 
+  np.savez(out_file_name, precision=precision, recall=recall,
            area_pr=area_pr, best_f1=best_f1, f1=f1, runtime=runtime,
            threshold=threshold)
   return threshold, precision, recall, f1, best_f1, area_pr
@@ -63,11 +63,11 @@ def save_results(out_file_name, threshold_results, overall_result, runtime):
 def main(_):
   fn = compute_edges_dxdy
   imlist = get_imlist(FLAGS.imset)
-  
+
   output_dir = FLAGS.output_dir
   if not os.path.exists(output_dir):
     os.makedirs(output_dir)
-  
+
   bench_dir = os.path.join(FLAGS.output_dir, 'bench')
   if not os.path.exists(bench_dir):
     os.makedirs(bench_dir)
@@ -77,21 +77,21 @@ def main(_):
 
   print('Evaluating:')
   sample_results, threshold_results, overall_result = \
-    evaluate_boundaries.pr_evaluation(N_THRESHOLDS, imlist, 
-                                      load_gt_boundaries, 
+    evaluate_boundaries.pr_evaluation(N_THRESHOLDS, imlist,
+                                      load_gt_boundaries,
                                       lambda x: load_pred(bench_dir, x),
                                       fast=True, progress=tqdm)
   print('Save results:')
   out_file_name = os.path.join(FLAGS.output_dir, 'metrics.npz')
   threshold, precision, recall, f1, best_f1, area_pr = \
     save_results(out_file_name, threshold_results, overall_result, runtime)
-  
+
   fig = plt.figure(figsize=(6,6))
   ax = fig.gca()
   display_results(ax, FLAGS.output_dir, threshold, precision, recall, f1, best_f1, area_pr)
   print('{:>24s}: {:<10.6f}'.format('runtime (in seconds)', runtime))
 
   fig.savefig(os.path.join(output_dir + '_pr.pdf'), bbox_inches='tight')
-  
+
 if __name__ == '__main__':
   app.run(main)

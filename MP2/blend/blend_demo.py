@@ -17,10 +17,13 @@ def main(_):
   I1 = cv2.imread(FLAGS.im1)
   I2 = cv2.imread(FLAGS.im2)
   mask = cv2.imread(FLAGS.mask)
+#   black = np.zeros(I1.shape)
   
   out = blend(I1, I2, mask)
   # save image
   cv2.imwrite(FLAGS.out_name, out)
+#   cv2.imwrite('1' + FLAGS.out_name, blend(I1, mask, mask))
+#   cv2.imwrite('2' + FLAGS.out_name, blend(mask, I2, mask))
 
 if __name__ == '__main__':
   app.run(main)
