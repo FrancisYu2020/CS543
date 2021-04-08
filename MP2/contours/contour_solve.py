@@ -22,6 +22,17 @@ def smoothing(input, sigma, dir):
     input = signal.convolve2d(input, derivative, mode='same', boundary='symm')
     return input
 
+def bells_and_whistles(input, dir):
+    # For bells and whistles, uncomment to run this part
+    # a = np.array([[1, 1, 1, 1, 1, 1, 1, 1, 1]]) #For bells and whistle 1
+    a = np.array([[1, 1, 1, 1, 0, 1, 1, 1, 1]]) #For bells and whistle 2
+    filters = [np.dot(a.T, a), np.array([[-1, 0, 1.]])]
+    if dir:
+        filters = [filter.T for filter in filters]
+    for filter in filters:
+        input = signal.convolve2d(input, filter, mode='same', boundary='symm')
+    return input
+
 def NMS(img, theta):
     Z = img - img
     M, N = Z.shape
@@ -68,8 +79,14 @@ def compute_edges_dxdy(I):
     # dy = signal.convolve2d(I, np.array([[-1, 0, 1]]).T, mode='same', boundary='symm')
 
     #Part 2 smoothing:
-    dx = smoothing(I, 2, 0)
-    dy = smoothing(I, 2, 1)
+    # dx = smoothing(I, 2, 0)
+    # dy = smoothing(I, 2, 1)
+
+    #Bells and whistles 2:
+    dx = bells_and_whistles(I, 0)
+    dy = bells_and_whistles(I, 1)
+
+    #Common part before NMS
     mag = np.sqrt(dx**2 + dy**2)
     theta = np.arctan2(dy, dx)
 

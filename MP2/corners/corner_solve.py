@@ -41,13 +41,13 @@ def compute_corners(I):
   response = Mx*My - Mxy**2 - alpha*(Mx + My)**2
 
   corners = response / response.max() * 255
-#   window_size = 3
-#   for h in range(0, H):
-#       for w in range(0, W):
-#           for i in range(max(0, h - window_size), min(h + window_size + 1, H)):
-#               for j in range(max(0, w - window_size), min(w + window_size + 1, W)):
-#                   if response[i, j] > response[h, w]:
-#                       corners[h, w] = 0
+  window_size = 3
+  for h in range(0, H):
+      for w in range(0, W):
+          for i in range(max(0, h - window_size), min(h + window_size + 1, H)):
+              for j in range(max(0, w - window_size), min(w + window_size + 1, W)):
+                  if response[i, j] > response[h, w]:
+                      corners[h, w] = 0
 
   corners = corners.astype(np.uint8)
 
